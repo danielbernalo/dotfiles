@@ -4,8 +4,8 @@
 
 # Automagically quote URLs. This obviates the need to quote them manually when
 # pasting or typing URLs.
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
+#autoload -Uz url-quote-magic
+#zle -N self-insert url-quote-magic
 
 # =============================================================================
 #                                   Plugins
@@ -30,7 +30,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator dir_joined
                                    dir_writable_joined vcs virtualenv)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(getkubecontext status command_execution_time
                                     background_jobs_joined time_joined
-                                    user_joined)
+                                    user_joined getkubecontext)
 POWERLEVEL9K_VCS_CLEAN_BACKGROUND="clear"
 POWERLEVEL9K_VCS_CLEAN_FOREGROUND="green"
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="clear"
@@ -111,12 +111,17 @@ zplug "lib/completion", from:oh-my-zsh
 zplug 'zsh-users/zsh-autosuggestions'
 zplug 'zsh-users/zsh-completions', defer:2
 zplug 'zsh-users/zsh-history-substring-search'
+<<<<<<< HEAD
 zplug 'zsh-users/zsh-syntax-highlighting', defer:3
 zplug 'superbrothers/zsh-kubectl-prompt'
 
 prompt_getkubecontext() {
   echo -n "%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}"
 }
+=======
+zplug 'zsh-users/zsh-syntax-highlighting', defer:2
+zplug 'superbrothers/zsh-kubectl-prompt'
+>>>>>>> Remove bindkeys for vi, and enable only macs, FZF search enabled
 
 if ! zplug check; then
   zplug install
@@ -131,7 +136,7 @@ if zplug check 'zsh-users/zsh-autosuggestions'; then
   # the terminal background color (when using a dark profile). Therefore, we
   # switch to gray.
   # See https://github.com/zsh-users/zsh-autosuggestions/issues/182.
-  #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=6'
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=6'
 fi
 
 prompt_getkubecontext() {
@@ -142,11 +147,36 @@ prompt_getkubecontext() {
 # we do not use the `expand-word' widget and only expand a few whitelisted
 # aliases.
 # See https://github.com/robbyrussell/oh-my-zsh/issues/6123 for discussion.
+<<<<<<< HEAD
 
 #zle -N globalias
 #bindkey -M emacs ' ' globalias
 #bindkey -M viins ' ' globalias
+#bindkey -M isearch ' ' magic-space # normal space during searches
+=======
+globalias() {
+  # FIXME: the whitelist pattern should technically only be computed once, but
+  # since it's cheap, we keep it local for now.
+  local -a whitelist candidates
+  whitelist=(ls git tmux)
+  local pattern="^(${(j:|:)whitelist})"
+  for k v in ${(kv)aliases}; do
+    # We have a candidate unless the alias is an alias that begins with itself,
+    # e.g., ls='ls --some-option'.
+    if [[ $v =~ $pattern && ! $v =~ ^$k ]]; then
+      candidates+=($k)
+    fi
+  done
+  if [[ $LBUFFER =~ "(^|[;|&])\s*(${(j:|:)candidates})\s*($|[;|&])" ]]; then
+    zle _expand_alias
+  fi
+  zle self-insert
+}
+zle -N globalias
+bindkey -M emacs ' ' globalias
+bindkey -M viins ' ' globalias
 bindkey -M isearch ' ' magic-space # normal space during searches
+>>>>>>> Remove bindkeys for vi, and enable only macs, FZF search enabled
 
 
 # =============================================================================
@@ -261,6 +291,7 @@ bindkey '^b' backward-word
 bindkey '^k' kill-line
 bindkey '^d' delete-char
 
+
 # More convenient acceptance of suggested command line.
 if zplug check 'zsh-users/zsh-autosuggestions'; then
   bindkey '^ ' autosuggest-execute
@@ -273,8 +304,8 @@ if zplug check 'zsh-users/zsh-history-substring-search'; then
   bindkey "$terminfo[kcud1]" history-substring-search-down
   bindkey '^p' history-substring-search-up
   bindkey '^n' history-substring-search-down
-  bindkey -M vicmd 'k' history-substring-search-up
-  bindkey -M vicmd 'j' history-substring-search-down
+  #bindkey -M vicmd 'k' history-substring-search-up
+  #bindkey -M vicmd 'j' history-substring-search-down
 fi
 
 # Do not require a space when attempting to tab-complete.
@@ -282,9 +313,7 @@ bindkey '^i' expand-or-complete-prefix
 
 # FZF
 if zplug check 'junegunn/fzf'; then
-  export FZF_DEFAULT_OPTS='--height 30%
-      --color fg:223,bg:235,hl:208,fg+:229,bg+:237,hl+:167,border:237
-      --color info:246,prompt:214,pointer:214,marker:142,spinner:246,header:214'
+  export FZF_DEFAULT_OPTS='--height 30%'
 fi
 
 # =============================================================================
@@ -344,10 +373,6 @@ update() {
   # Homebrew
   brew upgrade
   brew cleanup
-  # Ruby
-  gem update --system
-  gem update
-  gem cleanup
   # npm
   npm install npm -g
   npm update -g
@@ -431,6 +456,3 @@ function ssl-check() {
 }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-export OKTA_API_KEY=00YH8HXpewB6k3IJ6b9RRgA94csLH73c7qy43dpaWh
