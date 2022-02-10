@@ -10,5 +10,6 @@ wid=${2}-${1}-${3}
 # yabai -m window north --stack weast
 # echo -n "$(yabai -m query --windows --window)"
 # echo -n "WINDOWS: ${wid}"
-yabai -m window north --stack $(yabai -m query --windows --window | jq -r '.id')
+# yabai -m window north --stack $(yabai -m query --windows --window | jq -r '.id')
+# yabai -m window --stack next
 # yabai -m window west --stack $(yabai -m query --windows --window | jq -r '.id') && echo $wid && echo $(yabai -m query --windows --window | jq -r '.id')

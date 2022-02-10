@@ -16,3 +16,4 @@ wid="${2}"
 # yabai -m window "${wid}" --stack "${wid}" || (yabai -m window ${wid} --toggle float && yabai -m window ${wid} --toggle float)
 # yabai -m window weast --stack $(yabai -m query --windows --window | jq -r '.id')
 #  yabai -m window north --stack $(yabai -m query --windows --window | jq -r '.id') && echo $wid && echo $(yabai -m query --windows --window | jq -r '.id')
+yabai -m window --stack next

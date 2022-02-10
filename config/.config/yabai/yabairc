@@ -2,17 +2,25 @@
 #YABAI STUFF
 
 # bsp or float (default: bsp)
-#yabai -m config layout bsp
+yabai -m config layout bsp
 sudo yabai --load-sa
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
 # My custom space names for my 3 monitor setup. These names are used in some of my scripts.
-yabai -m space 1 --label one
-yabai -m space 2 --label two
-yabai -m space 3 --label three
-yabai -m space 4 --label four
-yabai -m space 5 --label five
-yabai -m space 6 --label six
+# create at lease 8 spaces
+yabai -m space --create
+yabai -m space --create
+yabai -m space --create
+yabai -m space --create
+yabai -m space --create
+yabai -m space --create
+
+yabai -m space 1 --label main --layout stack
+yabai -m space 2 --label personal --layout stack
+yabai -m space 3 --label research --layout stack
+yabai -m space 4 --label comunication --layout stack
+yabai -m space 5 --label code-alt --layout stack
+yabai -m space 6 --label research-alt --layout stack
 #yabai -m space 9 --label nine
 
 # float system preferences. Most of these just diable Yabai form resizing them.
@@ -25,8 +33,18 @@ yabai -m rule --add app="^System Information$" sticky=on layer=above manage=off
 yabai -m rule --add app="^Activity Monitor$" sticky=on layer=above manage=off
 yabai -m rule --add app="^Path Finder$" manage=off
 yabai -m rule --add app="^TeamViewer$" sticky=off layer=above manage=off
-# yabai -m rule --add app="^Microsoft Teams$" sticky=on layer=above manage=off
-# yabai -m rule --add app="^WhatsApp$" sticky=on layer=above manage=off
+yabai -m rule --add app="^Calculator$" sticky=off layer=above manage=off
+
+#Settings intellij works and personal
+yabai -m rule --add app="^Intellij IDEA$" title="^mic-.*" sticky=off space=main
+# yabai -m rule --add app="^Intellij IDEA$" title="!.*mic-.*" sticky=off space=personal
+
+yabai -m rule --add app="^Microsoft Teams$" title=".*Microsoft Teams.*" sticky=off space=comunication
+yabai -m rule --add app="^WhatsApp$" sticky=off space=comunication
+yabai -m rule --add app="^Spotify$" sticky=off space=comunication
+
+yabai -m rule --add app="^Google Chrome$" title=".*\(NUEVOESTE\).*"  sticky=off space=personal
+yabai -m rule --add app="^Google Chrome$" title=".*capitole-consulting.*"  sticky=off space=main
 # yabai -m rule --add app="Android Emulator"  manage=off
 
 #find ~/Library/Parallels/Applications\ Menus/ -maxdepth 3 -type f | awk -F'/' '{ print $NF; }' | awk '{$1=$1};1' | sort | uniq | tr "\n" "\0" | xargs -0 -I{} yabai -m rule --add app="^{}\$" title=".*" manage=on
@@ -46,13 +64,6 @@ yabai -m config active_window_opacity 1.0
 
 ## WITH SIP ENABLED (Installed Limelight seperately, Don't need this)
 yabai -m config window_border off
-
-## WTIH SIP DISABLED (Limelight build into Yabai, enable it here)
-#yabai -m config window_border on
-#yabai -m config window_border_width 3
-#yabai -m config active_window_border_color 0xFF40FF00
-#yabai -m config normal_window_border_color 0x00FFFFFF
-#yabai -m config insert_feedback_color        0xffd75f5f
 
 # toggle split between vertical and horizontal
 # yabai -m window --toggle split
@@ -78,16 +89,16 @@ yabai -m config mouse_action1 move
 #yabai -m config --space 3 layout             float
 
 ## Change how yabai looks
-yabai -m config layout bsp
-yabai -m config top_padding 2
-yabai -m config bottom_padding 10
+# yabai -m config layout bsp
+yabai -m config top_padding 0
+yabai -m config bottom_padding 2
 yabai -m config left_padding 45
 yabai -m config right_padding 55
-yabai -m config window_gap 10
+yabai -m config window_gap 8
 
 
 
-# yabai -m window --stack next
+yabai -m window --stack next
 
 #Limelight addon (Kill it and start it each time Yabai starts)
 killall limelight &>/dev/null
