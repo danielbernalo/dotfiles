@@ -34,12 +34,7 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=magenta,bold'
 ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=yellow,bold'
 
-if [[ ! -d "${ZPLUG_HOME}" ]]; then
-  if [[ ! -d ~/.zplug ]]; then
-    git clone https://github.com/zplug/zplug ~/.zplug
-  fi
-  export ZPLUG_HOME=~/.zplug
-fi
+export ZPLUG_HOME=~/.zplug
 source "${ZPLUG_HOME}/init.zsh"
 
 zplug 'plugins/colored-man-pages', from:oh-my-zsh
@@ -59,9 +54,9 @@ zplug 'superbrothers/zsh-kubectl-prompt'
 zplug 'paulirish/git-open', as:plugin
 zplug romkatv/powerlevel10k, as:theme, depth:1
 
-if ! zplug check; then
-  zplug install
-fi
+# if ! zplug check; then
+#   zplug install
+# fi
 
 zplug load
 
@@ -152,33 +147,9 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# OS-specific aliases
-if [[ $OSTYPE = darwin* ]]; then
-  # Lock screen (e.g., when leaving computer).
-  alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-  # Hide/show all desktop icons (useful when presenting)
-  alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false \
-    && killall Finder"
-  alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true \
-    && killall Finder"
-  # Combine PDFs on the command line.
-  pdfcat() {
-    if [[ $# -lt 2 ]]; then
-      echo "usage: $0 merged.pdf input0.pdf [input1.pdf ...]" > /dev/stderr
-      return 1
-    fi
-    local output="$1"
-    shift
-    # Try pdfunite first (from Homebrew package poppler), because it's much
-    # faster and doesn't perform stupid page rotations.
-    if which pdfunite > /dev/null 2>&1; then
-      pdfunite "$@" "$output"
-    else
-      local join='/System/Library/Automator/Combine PDF Pages.action/Contents/Resources/join.py'
-      "$join" -o "$output" "$@" && open "$output"
-    fi
-  }
-fi
+# Git Alias 
+alias gs='git status'
+alias ga='git add . && gs'
 
 # =============================================================================
 #                                Key Bindings
@@ -259,14 +230,6 @@ intersect() {
   esac | $sort | uniq -d
 }
 
-# Changes an iTerm profile by sending a proprietary escape code that iTerm
-# intercepts. This function additionally updates ITERM_PROFILE environment
-# variable.
-iterm-profile() {
-  echo -ne "\033]50;SetProfile=$1\a"
-  export ITERM_PROFILE="$1"
-}
-
 # Convenience function to update system applications and user packages.
 update() {
   # sudoe once
@@ -291,9 +254,21 @@ update() {
   npm install npm -g
   npm update -g
   # Shell plugin management
+  if [[ ! -d "${ZPLUG_HOME}" ]]; then
+    if [[ ! -d ~/.zplug ]]; then
+      git clone https://github.com/zplug/zplug ~/.zplug
+    fi
+    export ZPLUG_HOME=~/.zplug
+  fi
   zplug update
   .tmux/plugins/tpm/bin/update_plugins all
   vim +PlugUpgrade +PlugUpdate +PlugCLean! +qa
+}
+
+select_java(){
+  export JAVA_HOME=$(/usr/libexec/java_home -v$1)
+  echo "Now JAVA_HOME is"
+  echo $JAVA_HOME;
 }
 
 # =============================================================================
@@ -324,54 +299,8 @@ if [[ -f ~/.zshrc.local ]]; then
   source ~/.zshrc.local
 fi
 
-function ssl-check() {
-    f=~/.localhost_ssl;
-    ssl_crt=$f/server.crt
-    ssl_key=$f/server.key
-    b=$(tput bold)
-    c=$(tput sgr0)
-
-    local_ip=$(ipconfig getifaddr $(route get default | grep interface | awk '{print $2}'))
-    # local_ip=999.999.999 # (uncomment for testing)
-
-    domains=(
-        "localhost"
-        "$local_ip"
-    )
-
-    if [[ ! -f $ssl_crt ]]; then
-        echo -e "\n🛑  ${b}Couldn't find a Slate SSL certificate:${c}"
-        make_key=true
-    elif [[ ! $(openssl x509 -noout -text -in $ssl_crt | grep $local_ip) ]]; then
-        echo -e "\n🛑  ${b}Your IP Address has changed:${c}"
-        make_key=true
-    else
-        echo -e "\n✅  ${b}Your IP address is still the same.${c}"
-    fi
-
-    if [[ $make_key == true ]]; then
-        echo -e "Generating a new Slate SSL certificate...\n"
-        count=$(( ${#domains[@]} - 1))
-        mkcert ${domains[@]}
-
-        # Create Slate's default certificate directory, if it doesn't exist
-        test ! -d $f && mkdir $f
-
-        # It appears mkcert bases its filenames off the number of domains passed after the first one.
-        # This script predicts that filename, so it can copy it to Slate's default location.
-        if [[ $count = 0 ]]; then
-            mv ./localhost.pem $ssl_crt
-            mv ./localhost-key.pem $ssl_key
-        else
-            mv ./localhost+$count.pem $ssl_crt
-            mv ./localhost+$count-key.pem $ssl_key
-        fi
-    fi
-}
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
