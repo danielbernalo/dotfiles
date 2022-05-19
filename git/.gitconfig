@@ -49,11 +49,6 @@
 
 [rerere]
 	enabled = true
-
-[user]
-	name = danielbernalo
-	email = danielbernal@nuevoeste.com
-  
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

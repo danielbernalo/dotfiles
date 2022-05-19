@@ -1,6 +1,7 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+export PATH=$PATH:/usr/local/bin
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -150,6 +151,7 @@ alias egrep='egrep --color=auto'
 # Git Alias 
 alias gs='git status'
 alias ga='git add . && gs'
+alias gn='git checkout -b '
 
 # =============================================================================
 #                                Key Bindings
@@ -220,6 +222,12 @@ zstyle ':completion:*:kill:*'   force-list always
 #                                    Other
 # =============================================================================
 
+# Git
+#gc() {
+#  git checkout $@
+#  echo "git checkout $@"
+#  git pull
+#}
 # Utility that prints out lines that are common among $# files.
 intersect() {
   local sort='sort -S 1G'
@@ -304,3 +312,9 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# git account switch
+source $HOME/.git-acc

@@ -21,23 +21,29 @@ CurrentlyFocusedDisplay=$(echo $CurrentlyFocusedWindow | jq -re ".display")
 CurrentlyVisibleSpaceNames=$(yabai -m query --spaces | jq -re ".[] | select(.visible == 1)" | jq -re ".label")
 
 # my custom space names in yabairc:
-#  yabai -m space 1 --label one
-#  yabai -m space 2 --label two
-#  yabai -m space 3 --label three
-#  yabai -m space 4 --label four
+# yabai -m space 1 --label main --layout stack
+# yabai -m space 2 --label personal --layout stack
+# yabai -m space 3 --label research --layout stack
+# yabai -m space 4 --label comunication --layout stack
+# yabai -m space 5 --label code-alt --layout stack
+# yabai -m space 6 --label research-alt --layout stack
 
 case $inputKeyNumber in
 '1')
-    firstSpaceName='one'
+    firstSpaceName='main'
     firstspacenumber='1'
-    secondSpaceName='two'
+    secondSpaceName='personal'
     secondSpacenumber='2'
+    threeSpaceName='research'
+    threeSpacenumber='3'
     ;;
 '2')
-    firstSpaceName='three'
-    firstspacenumber='3'
-    secondSpaceName='four'
-    secondSpacenumber='4'
+    firstSpaceName='comunication'
+    firstspacenumber='4'
+    secondSpaceName='code-alt'
+    secondSpacenumber='5'
+    threeSpaceName='research'
+    threeSpacenumber='6'
     ;;
 
 esac
