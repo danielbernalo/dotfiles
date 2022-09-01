@@ -34,7 +34,7 @@ resize < ctrl + shift - r [
 default < hyper - d ; display
 default < hyper - s ; stack
 default < hyper - w ; window
-default < meh - r ; resize
+default < hyper - r ; resize
 default < hyper - l ; launch
 default < hyper - i ; inst
 
@@ -44,7 +44,7 @@ display, window, resize, launch, stack, inst < escape ; default
 display < hyper - d ; default
 stack   < hyper - s ; default
 window  < hyper - w ; default
-resize  < meh - r ; default
+resize  < hyper - r ; default
 launch  < hyper - l ; default
 inst    < hyper - i ; default
 
@@ -99,7 +99,8 @@ ctrl + alt - left      : yabai -m display --focus west || yabai -m display --foc
 ctrl + alt - right     : yabai -m display --focus east || yabai -m display --focus recent
 ctrl + alt - up        : yabai -m display --focus north || yabai -m display --focus recent
 ctrl + alt - down      : yabai -m display --focus south || yabai -m display --focus recent
-
+hyper - h              : yabai -m space --focus prev
+hyper - l              : yabai -m space --focus next
 # fast focus desktop
 ctrl - left            : yabai -m space --focus prev
 ctrl - right           : yabai -m space --focus next

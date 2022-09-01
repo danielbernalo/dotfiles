@@ -301,7 +301,13 @@ setup_agents() {
 }
 setup_agents
 unfunction setup_agents
-
+# load right prompt the git ssh account active
+function prompt_gitacc() {
+  export ACTIVE_GIT_ACC=$(gitacc active a)
+  if [ ! -z "$ACTIVE_GIT_ACC" ]; then
+      p10k segment -f blue -i '👨🏻‍💻' -t "👨🏻‍💻 $ACTIVE_GIT_ACC"
+    fi  
+}
 # Source local customizations.
 if [[ -f ~/.zshrc.local ]]; then
   source ~/.zshrc.local

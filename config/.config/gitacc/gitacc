@@ -1,0 +1,169 @@
+#!/usr/bin/env -u PYTHONPATH python3
+
+import argparse
+import os
+import re
+import subprocess
+import sys
+from typing import Dict, List
+from pathlib import Path
+import configparser
+
+HOME = os.getenv("HOME")
+# SSH_AUTH_SOCK = os.getenv("SSH_AUTH_SOCK")
+SSH_KEY_LOCATE = "{}{}".format(HOME,"/.ssh/id_")
+SSH_KEY_TYPE = "rsa"
+CONFIG_FILE = Path("{}/.gitacc".format(HOME))
+
+config = configparser.ConfigParser()
+config.read(CONFIG_FILE)
+
+class SshAgent(object):
+    def __init__(self, agent_env: Dict[str, str]) -> None:
+        self.agent_env = agent_env
+        self.pid = agent_env['SSH_AGENT_PID']
+        self.environ = {}  # type: Dict[str, str]
+        self.environ.update(os.environ)
+        self.environ.update(agent_env)
+        self.environ.update({
+            'PROMPT': '(sshify) ' + self.environ.get('PROMPT', ''),
+        })
+
+    @classmethod
+    def start(cls) -> 'SshAgent':
+        print("Starting ssh-agent")
+        output = subprocess.check_output(['ssh-agent', '-s'])
+        agent_env = cls.parse_agent_env(output)
+        return cls(agent_env)
+
+    def add_key(self, path: str) -> None:
+        subprocess.check_call(['ssh-add', path], env=self.environ)
+
+    def git_user(self, username: str, email: str) -> None:
+        subprocess.check_call(['git','config', '--global', 'user.name', username], env=self.environ)
+        subprocess.check_call(['git','config', '--global', 'user.email', email], env=self.environ)
+
+    def stop(self) -> None:
+        print("Killing ssh-agent")
+        subprocess.check_call(['ssh-agent', '-k'], env=self.environ)
+        # subprocess.check_call(['unset', 'SSH_AUTH_SOCK', 'SSH_AGENT_PID'], env=self.environ)
+        # del os.environ['SSH_AUTH_SOCK']
+        # del os.environ['SSH_AGENT_PID']
+        # subprocess.check_call(['kill', self.pid])
+        
+
+    def __enter__(self) -> 'SshAgent':
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.stop()
+
+    @staticmethod
+    def parse_agent_env(output: bytes) -> Dict[str, str]:
+        result = {}
+        for name, value in re.findall(r'([A-Z_]+)=([^;]+);',
+                                      output.decode('ascii')):
+            result[name] = value
+        return result
+
+
+def main(argv: List[str]) -> None:
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        prog=os.path.basename(argv[0]),
+        usage='%(prog)s [command] [account]',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument('command', choices=['add', 'remove', "login", 'logout', 'active'], help='action of git ssh accounts, one of add, remove or logout')
+    parser.add_argument("account", help="name ssh account")
+
+    args, cmd = parser.parse_known_args(argv[1:])
+
+    if len(cmd) == 0:
+        cmd = [os.environ.get('COMSPEC', os.environ.get('SHELL', 'bash'))]
+
+    env = {}  # type: Dict[str, str]
+
+    def run():
+        try:
+            subprocess.call(cmd, env=env)
+        except KeyboardInterrupt:
+            pass
+    def set_active():
+        if ("profile" not in config.sections()):
+            config.add_section("profile")
+        
+        config.set("profile", "active", args.account)
+        
+        with open(CONFIG_FILE, 'w') as configfile:
+            config.write(configfile)
+
+    def logout():
+        try:
+            env.update(os.environ)
+            subprocess.check_call(['ssh-agent', '-k'], env=env)
+            del os.environ['SSH_AUTH_SOCK']
+            del os.environ['SSH_AGENT_PID']
+        except:
+            pass
+
+
+    def login():
+        SSH_KEY_NAME = "{}{}_{}".format(SSH_KEY_LOCATE, SSH_KEY_TYPE, args.account)
+        if (args.account in config.sections()):
+            print("Active git ssh account: {}".format(args.account))
+            GIT_USER = config.get(args.account, "name")
+            GIT_EMAIL = config.get(args.account, "email")
+            SSH_KEY_NAME = config.get(args.account, "private_key")
+            
+            logout()
+                
+            with SshAgent.start() as agent:
+                agent.add_key(SSH_KEY_NAME)
+                agent.git_user(GIT_USER, GIT_EMAIL)
+                env.update(agent.environ)
+                set_active()
+                run()
+        else:
+            print("No found account with this name")
+
+    if args.command == "add":
+        if (args.account in config.sections() or args.account == "profile"):
+            print("Already hame same account name, please use another one, or remove before.")
+            exit()
+
+        GIT_USER =input("Enter your git user name: ")
+        GIT_EMAIL=input("Enter your git user email: ")
+        SSH_KEY_NAME = "{}{}_{}".format(SSH_KEY_LOCATE, SSH_KEY_TYPE, args.account)
+        print("ssh-keygen -t {} -C {} -f {}".format(SSH_KEY_TYPE, GIT_EMAIL, SSH_KEY_NAME))
+        os.system("ssh-keygen -t {} -C {} -f {}".format(SSH_KEY_TYPE, GIT_EMAIL, SSH_KEY_NAME))
+    
+        config.add_section(args.account)
+        config.set(args.account, "name", GIT_USER)
+        config.set(args.account, "email", GIT_EMAIL)
+        config.set(args.account, "private_key", SSH_KEY_NAME)
+        config.set(args.account, "public_key", "{}.pub".format(SSH_KEY_NAME))
+        config.add_section("profile")
+        config.set("profile", "active", args.account)
+        print("Your SSH publish key is: ")
+        os.system("cat {}.pub".format(SSH_KEY_NAME))
+        
+        login()
+        
+        with open(CONFIG_FILE, 'w') as configfile:
+            config.write(configfile)
+        
+
+    elif args.command == "login":
+        login()
+
+    elif args.command == "logout":
+        logout()
+    
+    elif args.command == "active":
+        print(config.get("profile", "active"))
+
+    
+
+if __name__ == "__main__":
+    main(sys.argv)

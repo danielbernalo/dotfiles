@@ -33,9 +33,10 @@
   cmd = /usr/local/bin/icdiff --line-numbers $LOCAL $REMOTE
 
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 	required = true
+	process = git-lfs filter-process
 
 [merge]
 	tool = meld
@@ -57,3 +58,10 @@
 	trustExitCode = true
 [url "git@github.com:"]
 	insteadOf = https://github.com
+[core]
+	excludesfile = /Users/danielbernal/.gitignore_global
+[user]
+	name = Daniel Bernal
+	email = daniel.bernal@longevo.com
+[init]
+	defaultBranch = main
