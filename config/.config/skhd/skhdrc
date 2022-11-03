@@ -139,7 +139,7 @@ ctrl - 0x18            : yabai -m space --focus "$(yabai -m query --spaces --dis
 alt - f                : yabai -m window --toggle float; \
                          yabai -m window --grid 4:4:1:1:2:2
 
-######################## Insert mode ###########################################
+#######Rr################# Insert mode ###########################################
 
 inst < left            : yabai -m window --insert west; skhd -k 'escape'
 inst < down            : yabai -m window --insert south; skhd -k 'escape'
@@ -238,12 +238,17 @@ resize < z             : yabai -m query --windows --space | \
 display < 0x2F         : yabai -m display --focus prev || \
                          yabai -m display --focus next; \
                          skhd -k 'escape'
+ctrl + shift - 0x2F    : yabai -m display --focus prev || \
+                         yabai -m display --focus next; \
+                         skhd -k 'escape'
 
 # Focus next display . (Like >)
 display < 0x2B         : yabai -m display --focus next || \
                          yabai -m display --focus prev; \
                          skhd -k 'escape'
-
+ctrl + shift - 0x2B    : yabai -m display --focus next || \
+                         yabai -m display --focus prev; \
+                         skhd -k 'escape'
 # Send window to north/up display and follow focus
 display < up           : yabai -m window --display north; \
                          yabai -m display --focus north; \
