@@ -24,10 +24,10 @@ yabai -m config mouse_action2                resize
 # general space settings
 yabai -m config external_bar                 all:0:15
 yabai -m config layout                       bsp
-yabai -m config top_padding                  30
-yabai -m config bottom_padding               8
-yabai -m config left_padding                 25
-yabai -m config right_padding                22
+yabai -m config top_padding                  40
+yabai -m config bottom_padding               6
+yabai -m config left_padding                 15
+yabai -m config right_padding                15
 yabai -m config window_gap                   10
 
 yabai -m config insert_feedback_color        0xffd65d0e
@@ -63,6 +63,16 @@ yabai -m signal --add \
 #Limelight addon (Kill it and start it each time Yabai starts)
 killall limelight &>/dev/null
 limelight &>/dev/null &
+
+#Rename spaces[8]
+yabai -m space 1 --label main
+yabai -m space 2 --label howto
+yabai -m space 3 --label fixit
+yabai -m space 4 --label others
+yabai -m space 5 --label messages
+yabai -m space 6 --label research
+yabai -m space 7 --label more
+yabai -m space 8 --label personal
 
 yabai -m signal --add event=space_changed \
     action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-spaces-jsx\"'"
