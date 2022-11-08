@@ -343,9 +343,9 @@ main() {
   if [ "$command" = "dotfiles" ] || [ -z "$command" ]; then
     sh "$(dirname "$0")/dots" install -a
   fi
-  if [ "$command" = "tmux" ] || [ -z "$command" ]; then
-    setup_tmux
-  fi
+  # if [ "$command" = "tmux" ] || [ -z "$command" ]; then
+    # setup_tmux
+  # fi
   if [ "$command" = "vim" ] || [ -z "$command" ]; then
     setup_vim
   fi
