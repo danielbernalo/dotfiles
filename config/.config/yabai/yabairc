@@ -10,6 +10,13 @@ yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 # https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#updating-to-the-latest-release
 
 # global settings
+yabai -m config window_border on
+yabai -m config window_border_width        2
+yabai -m config window_border_radius       11
+yabai -m config active_window_border_color 0xFF40FF00
+yabai -m config normal_window_border_color 0x00FFFFFF
+yabai -m config insert_feedback_color 0xFFA3BE8C
+
 yabai -m config mouse_follows_focus          on
 yabai -m config focus_follows_mouse          off
 yabai -m config window_placement             second_child
@@ -22,13 +29,13 @@ yabai -m config mouse_action1                move
 yabai -m config mouse_action2                resize
 
 # general space settings
-yabai -m config external_bar                 all:0:15
+yabai -m config external_bar                 all:35:20
 yabai -m config layout                       bsp
-yabai -m config top_padding                  40
-yabai -m config bottom_padding               6
-yabai -m config left_padding                 15
-yabai -m config right_padding                15
-yabai -m config window_gap                   10
+yabai -m config top_padding                  0
+yabai -m config bottom_padding               0
+yabai -m config left_padding                 10
+yabai -m config right_padding                10
+yabai -m config window_gap                   7
 
 yabai -m config insert_feedback_color        0xffd65d0e
 
@@ -58,11 +65,6 @@ yabai -m signal --add \
     app='^WhatsApp$' \
     title='^$' \
     action='yabai -m window --focus next > /dev/null 2>&1'
-
-
-#Limelight addon (Kill it and start it each time Yabai starts)
-killall limelight &>/dev/null
-limelight &>/dev/null &
 
 #Rename spaces[8]
 yabai -m space 1 --label main
