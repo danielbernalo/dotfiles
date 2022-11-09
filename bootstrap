@@ -16,6 +16,7 @@ usage() {
   echo "    tmux         install Tmux plugins"
   echo "    vim          install Vim plugins"
   echo "    zsh          setup Zsh as login shell"
+  echo "    update       update system"
   echo
   echo "without any arguments, all aspects will be setup (in the above order)"
   echo
@@ -326,8 +327,6 @@ main() {
         osascript -e 'tell application "System Preferences" to quit'
         log "adjusting macOS defaults"
         setup_macos
-        log "performing software update"
-        sudo softwareupdate -i -a > /dev/null 2>&1
         log "installing XCode comand line developer tools"
         xcode-select --install > /dev/null 2>&1 || true
         ;;
@@ -337,6 +336,11 @@ main() {
         ;;
     esac
   fi
+   if [ "$command" = "update" ] || [ -z "$command" ]; then
+    log "performing software update"
+    sudo softwareupdate -i -a > /dev/null 2>&1
+  fi
+        
   if [ "$command" = "homebrew" ] || [ -z "$command" ]; then
     setup_homebrew
   fi
