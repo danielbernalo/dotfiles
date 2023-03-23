@@ -65,10 +65,14 @@ export JAVA_HOME=$(/usr/libexec/java_home -v11)
 export CPPFLAGS="-I/usr/local/opt/openjdk@11/include"
 export LANGUAGE="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-
+export VERTX_CONFIG_PATH="config-local.yaml"
 #export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 #export PATH="/usr/local/opt/ruby@2.4/bin:$PATH"
 #export LDFLAGS="-L/usr/local/opt/ruby@2.4/lib"
 #export CPPFLAGS="-I/usr/local/opt/ruby@2.4/include"
 #export PKG_CONFIG_PATH="/usr/local/opt/ruby@2.4/lib/pkgconfig"
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+export PATH="/usr/local/opt/libpq/bin:$PATH"
 # vim: ft=zsh
