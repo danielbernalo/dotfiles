@@ -37,7 +37,7 @@ yabai -m config window_border_blur off
 
 # general space settings
 yabai -m config external_bar                 all:35:20
-yabai -m config layout                       bsp
+yabai -m config layout                       stack
 yabai -m config top_padding                  0
 yabai -m config bottom_padding               0
 yabai -m config left_padding                 10
@@ -63,8 +63,13 @@ yabai -m signal --add \
     event=window_focused \
     app='^Microsoft Teams$' \
     title='^Microsoft Teams Notification$' \
+
+yabai -m signal --add \
+    event=window_focused \
+    app='^IntelliJ IDEA$' \
+    title='^.*$' \
+    manage=off
     
-    action='yabai -m window --focus next > /dev/null 2>&1'
 
 # Don't manage WhatsApp call windows
 yabai -m signal --add \
@@ -76,12 +81,12 @@ yabai -m signal --add \
 #Rename spaces[8]
 yabai -m space 1 --label main
 yabai -m space 2 --label howto
-yabai -m space 3 --label fixit
-yabai -m space 4 --label others
-yabai -m space 5 --label messages
-yabai -m space 6 --label research
-yabai -m space 7 --label more
-yabai -m space 8 --label personal
+#yabai -m space 3 --label fixit
+#yabai -m space 4 --label others
+#yabai -m space 5 --label messages
+#yabai -m space 6 --label research
+#yabai -m space 7 --label more
+#yabai -m space 8 --label personal
 # yabai -m space --balance
 yabai -m signal --add event=space_changed \
     action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-spaces-jsx\"'"
@@ -114,9 +119,9 @@ yabai -m signal --add event=space_changed \
 #     action="yabai -m window --focus mouse"
 
 # Rearrange windows when a new display is added
-# yabai -m signal --add event=display_added \
-#     action="$HOME/.config/yabai/rearrange.sh add"
+yabai -m signal --add event=display_added \
+    action="$HOME/.config/yabai/rearrange.sh add"
 
 # Rearrange windows when a display is removed
-# yabai -m signal --add event=display_removed \
-#     action="$HOME/.config/yabai/rearrange.sh remove"
+yabai -m signal --add event=display_removed \
+    action="$HOME/.config/yabai/rearrange.sh remove"
