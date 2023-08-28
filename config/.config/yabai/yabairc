@@ -85,7 +85,7 @@ yabai -m space 1 --label fixit
 yabai -m space 2 --label messages
 yabai -m space 3 --label research
 yabai -m space 4 --label main
-yabai -m space 5 --label lab
+yabai -m space 5 --label tests
 yabai -m space 6 --label personal
 
 yabai -m rule --add app="^(WhatsApp|Microsoft Teams|Mattermost|Slack|Mail)$" space=2
@@ -141,4 +141,4 @@ yabai -m signal --add event=window_created \
 # yabai -m signal --add event=window_focused action='$HOME/.config/yabai/event_create_window.sh'
 # yabai -m signal --add event=application_front_switched action='$HOME/.config/yabai/event_create_window.sh'
 # yabai -m signal --add event=application_terminated action='$HOME/.config/yabai/event_create_window.sh'
-yabai -m signal --add event=window_destroyed action='$HOME/.config/yabai/event_create_window.sh'
+yabai -m signal --add event=window_desslatroyed action='$HOME/.config/yabai/event_create_window.sh'
