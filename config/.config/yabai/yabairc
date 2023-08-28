@@ -2,9 +2,9 @@
 
 # necessary to load scripting-addition during startup on macOS Big Sur
 # *yabai --load-sa* is configured to run through sudo without a password
-sudo yabai --load-sa
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
 
 # Follow this guide whrn updating yabai to latest version
 # https://github.com/koekeishiya/yabai/wiki/Installing-yabai-(latest-release)#updating-to-the-latest-release
@@ -13,7 +13,7 @@ yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 yabai -m config window_border on
 yabai -m config window_border_width        1
 yabai -m config window_border_radius       8
-yabai -m config active_window_border_color 0xFFFFFFFF
+yabai -m config active_window_border_color 0xFF000000
 yabai -m config normal_window_border_color 0x00FFFFFF
 yabai -m config insert_feedback_color 0xFFA3BE8C
 
@@ -37,14 +37,14 @@ yabai -m config window_border_blur off
 
 # general space settings
 yabai -m config external_bar                 all:35:20
-yabai -m config layout                       stack
+yabai -m config layout                       bsp
 yabai -m config top_padding                  0
 yabai -m config bottom_padding               0
-yabai -m config left_padding                 10
-yabai -m config right_padding                10
+yabai -m config left_padding                 24
+yabai -m config right_padding                5
 yabai -m config window_gap                   7
 
-yabai -m config insert_feedback_color        0xffd65d0e
+yabai -m config insert_feedback_color        0x00FFFFFF
 
 # Unmanaged apps
 app_titles="(Copy|Bin|About This Mac|Info|Finder Preferences|Preferences"
@@ -52,7 +52,7 @@ app_titles+="|QuickTime Player|Stickies)"
 yabai -m rule --add title="${app_titles}" manage=off
 
 app_names="^(Calculator|Authy Desktop|Postgres|VLC|System Preferences|IINA"
-app_names+="|iMazing HEIC Converter|AppCleaner|Stickies|1Password 7|VeraCrypt"
+app_names+="|iMazing HEIC Converter|AppCleaner|Stickies|1Password 8|VeraCrypt"
 app_names+="|Tunnelblick|WireGuard|Logi Options|JetBrains Toolbox"
 app_names+="|Logi Options\+)$"
 yabai -m rule --add app="${app_names}" manage=off
@@ -63,12 +63,13 @@ yabai -m signal --add \
     event=window_focused \
     app='^Microsoft Teams$' \
     title='^Microsoft Teams Notification$' \
+    action='yabai -m window --focus next > /dev/null 2>&1'
 
 yabai -m signal --add \
     event=window_focused \
     app='^IntelliJ IDEA$' \
     title='^.*$' \
-    manage=off
+    action='yabai -m window --focus next > /dev/null 2>&1'
     
 
 # Don't manage WhatsApp call windows
@@ -78,32 +79,39 @@ yabai -m signal --add \
     title='^$' \
     action='yabai -m window --focus next > /dev/null 2>&1'
 
+
 #Rename spaces[8]
-yabai -m space 1 --label main
-yabai -m space 2 --label howto
-#yabai -m space 3 --label fixit
-#yabai -m space 4 --label others
-#yabai -m space 5 --label messages
-#yabai -m space 6 --label research
+yabai -m space 1 --label fixit
+yabai -m space 2 --label messages
+yabai -m space 3 --label research
+yabai -m space 4 --label main
+yabai -m space 5 --label lab
+yabai -m space 6 --label personal
+
+yabai -m rule --add app="^(WhatsApp|Microsoft Teams|Mattermost|Slack|Mail)$" space=2
+yabai -m rule --add app="^(Postman)$" space=5
+yabai -m rule --add app="^(Arc|Chrome|Safari)$" space=3
+yabai -m rule --add app="^(Spotify)$" space=6
+
 #yabai -m space 7 --label more
 #yabai -m space 8 --label personal
-# yabai -m space --balance
+yabai -m space --balance
 yabai -m signal --add event=space_changed \
-    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-spaces-jsx\"'"
+    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
 
 # if using multple displays, add an additional rule for "display_changed" event
 yabai -m signal --add event=display_changed \
-    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-spaces-jsx\"'"
+    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
 
 # add these rules to auto-update the "windows" widget
 yabai -m signal --add event=window_focused \
-    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-windows-jsx\"'"
+    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
 yabai -m signal --add event=window_destroyed \
-    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-windows-jsx\"'"
+    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
 yabai -m signal --add event=window_created \
-    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-windows-jsx\"'"
+    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
 yabai -m signal --add event=space_changed \
-    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"nibar-windows-jsx\"'"
+    action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
 
     
 # Focus window under cursor when an application is hidden
@@ -125,3 +133,12 @@ yabai -m signal --add event=display_added \
 # Rearrange windows when a display is removed
 yabai -m signal --add event=display_removed \
     action="$HOME/.config/yabai/rearrange.sh remove"
+
+yabai -m signal --add event=window_created \
+    action="$HOME/.config/yabai/event_create_window.sh"
+
+
+# yabai -m signal --add event=window_focused action='$HOME/.config/yabai/event_create_window.sh'
+# yabai -m signal --add event=application_front_switched action='$HOME/.config/yabai/event_create_window.sh'
+# yabai -m signal --add event=application_terminated action='$HOME/.config/yabai/event_create_window.sh'
+yabai -m signal --add event=window_destroyed action='$HOME/.config/yabai/event_create_window.sh'
