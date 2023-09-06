@@ -72,7 +72,7 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 #export CPPFLAGS="-I/usr/local/opt/ruby@2.4/include"
 #export PKG_CONFIG_PATH="/usr/local/opt/ruby@2.4/lib/pkgconfig"
 # export VERTX_CONFIG_PATH=config.yaml
-source /Users/danielbernal/workspace/github/masmovil/mysim_envs
+source /Users/danielbernal/workspaces/github/masmovil/mysim_envs
 export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion

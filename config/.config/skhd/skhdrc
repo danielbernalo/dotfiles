@@ -1,32 +1,25 @@
 #!/bin/sh
-
-ctrl + alt + cmd - r : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.yabai"; \
-                       launchctl kickstart -k "gui/${UID}/homebrew.mxcl.spacebar"
-ctrl + alt + cmd - s : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.skhd"
-
-ctrl + shift - c     : open -na /Applications/Google\ Chrome.app
-ctrl + shift - q     : yabai -m window --close
-ctrl + shift - v     : open -na /Applications/Visual\ Studio\ Code.app
-ctrl + shift - i     : open -na /Applications/Intellij\ IDEA.app
 ############################# Mode definitions ##################################
 :: default           : ~/.config/yabai/mode_controller.sh default # default mode: normal
 :: stack   @         : ~/.config/yabai/mode_controller.sh stack # stack mode: interact with stacks
 :: display @         : ~/.config/yabai/mode_controller.sh display # display mode: focus displays, move windows to other displays
 :: window  @         : ~/.config/yabai/mode_controller.sh window # window mode: manipulate windows and spaces
 :: resize  @         : ~/.config/yabai/mode_controller.sh resize # resize mode: resize windows in current space
-:: launch  @         : ~/.config/yabai/mode_controller.sh launch # launch mode: launch various applications
-:: inst    @         : ~/.config/yabaii/mode_controller.sh inst # insert mode: tell yabai where to insert the new window
+:: inst    @         : ~/.config/yabai/mode_controller.sh inst # insert mode: tell yabai where to insert the new window
+:: reload  @         : ~/.config/yabai/mode_controller.sh reload # reload mode: restart services
 
 
 # Hack to use "ctrl + shift - r" keybinding in RubyMine
 # to run tests but trigger resize mode everywhere else
 default < ctrl + shift - r [
   "rubymine"   ~
+  "code"   ~
   * : skhd -k "meh - r"
 ]
 
 resize < ctrl + shift - r [
   "rubymine"   ~
+  "code"   ~
   * : skhd -k "meh - r"
 ]
 
@@ -35,18 +28,19 @@ default < hyper - d ; display
 default < hyper - s ; stack
 default < hyper - w ; window
 default < hyper - r ; resize
-default < hyper - l ; launch
 default < hyper - i ; inst
+default < hyper - x ; reload
 
 # De-activate modes
-display, window, resize, launch, stack, inst < escape ; default
+display, window, resize, reload, stack, inst < escape ; default
 
 display < hyper - d ; default
 stack   < hyper - s ; default
 window  < hyper - w ; default
 resize  < hyper - r ; default
-launch  < hyper - l ; default
 inst    < hyper - i ; default
+reload  < hyper - x ; default
+
 
 ############################# Global modifiers ##################################
 
@@ -72,21 +66,15 @@ ctrl + shift - up     : yabai -m window --focus north || \
 
 ctrl + shift - down   : yabai -m window --focus south || \
                         yabai -m window --focus stack.next || \
-                        yabai -m window --focus stack.last || \
-                        yabai -m window --focus mouse
+                        yabai -m window --focus stack.first 
 
 ctrl - down           : yabai -m window --focus mouse
 
 # vi like key bindings
-ctrl + shift - l      : yabai -m window --focus east || yabai -m window --focus west
-ctrl + shift - h      : yabai -m window --focus west || yabai -m window --focus east
-ctrl + shift - k      : yabai -m window --focus north || \
-                        yabai -m window --focus stack.next || \
-                        yabai -m window --focus stack.last
-ctrl + shift - j      : yabai -m window --focus south || \
-                        yabai -m window --focus stack.prev || \
-                        yabai -m window --focus stack.first || \
-                        yabai -m window --focus mouse
+ctrl + shift - l      : skhd -k "ctrl + shift - right"
+ctrl + shift - h      : skhd -k "ctrl + shift - left"
+ctrl + shift - k      : skhd -k "ctrl + shift - up"
+ctrl + shift - j      : skhd -k "ctrl + shift - down"
 
 # toggle window native fullscreen
 ctrl + shift - f      : yabai -m window --toggle native-fullscreen
@@ -178,6 +166,18 @@ stack < space          : yabai -m query --spaces --space | \
                          else yabai -m space --layout stack; \
                          fi"; \
                          skhd -k 'escape'
+# Remove the current window from the stack. Only works if the space layout is bsp
+stack < b              : window="$(yabai -m query --windows --window | jq -r '.id')"; \
+                         yabai -m window east --stack $window || \
+                         (yabai -m window $window --toggle float && yabai -m window $window --toggle float); \
+                         skhd -k 'escape'
+
+# Stack all windows in the currect space on top of the current window while keeping the current space layout in bsp
+stack < s              : window="$(yabai -m query --windows --window | jq -r '.id')" && \
+                         yabai -m query --windows --space | jq -rc --arg w "$window" '[.[].id] | map(select(. != $w)) | .[]' | \
+                         xargs -I {} yabai -m window "$window" --stack {}; \
+                         skhd -k 'escape'
+
 ####################### Resize mode ############################################
 
 # Resize focused window towards left direction
@@ -356,23 +356,18 @@ window < space        : yabai -m query --spaces --space | \
                         else yabai -m space --layout stack; \
                         fi"; \
                         skhd -k 'escape'
+##################### Reload mode ##############################################
 
+reload < 0            : skhd -k 'escape'; \
+                        yabai --restart-service; \
+                        launchctl kickstart -k "gui/${UID}/homebrew.mxcl.sketchybar"; \
+                        skhd --restart-service
 
-##################### Launch mode ##############################################
+reload < 1            : yabai --restart-service; \
+                        skhd -k 'escape'
 
-launch < a            : open -na /Applications/Authy\ Desktop.app; skhd -k 'escape'
-launch < b            : open -a "About This Mac"; skhd -k 'escape'
-launch < c            : open -na /Applications/Google\ Chrome.app; skhd -k 'escape'
-launch < e            : open -na /Applications/Safari.app; skhd -k 'escape'
-launch < f            : open ~; skhd -k 'escape'
-launch < g            : open -na /Applications/Signal.app; skhd -k 'escape'
-launch < k            : open -na /Applications/Forklift.app; skhd -k 'escape'
-launch < l            : open -na /Applications/Slack.app; skhd -k 'escape'
-launch < m            : open -na /Applications/Spotify.app; skhd -k 'escape'
-launch < r            : open -na /Applications/Rambox.app; skhd -k 'escape'
-launch < s            : open "x-apple.systempreferences:"; skhd -k 'escape'
-launch < t            : open -na /Applications/Microsoft\ Teams.app; skhd -k 'escape'
-launch < v            : open -na /Applications/Visual\ Studio\ Code.app; skhd -k 'escape'
-launch < w            : open -na /Applications/WhatsApp.app; skhd -k 'escape'
-launch < d            : dark-mode; skhd -k 'escape'
-launch < i            : $HOME/.config/yabai/rearrange.sh sidecar; skhd -k 'escape'
+reload < 2            : skhd -k 'escape'; \
+                        skhd --restart-service
+
+reload < 3            : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.sketchybar"; \
+                        skhd -k 'escape'

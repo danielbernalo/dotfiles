@@ -5,9 +5,9 @@ xx=$(yabai -m query --windows --window)
 ss=$(yabai -m query --spaces --space)
 
 YABAI_WINDOW_ID="$(echo $xx | jq -re ".id")"
-YABAI_SPACE_ID="$(echo $xx | jq -re ".space")"
+YABAI_SPACE_ID="$(echo $ss | jq -re ".id")"
 
-WINDOWS_ARRAY=$(yabai -m query --windows --space 2 \
+WINDOWS_ARRAY=$(yabai -m query --windows --space $YABAI_SPACE_ID \
 | jq -re 'map(select(."is-minimized"==false and ."is-floating"==false))')
 
 # Get the number of windows on the current space
