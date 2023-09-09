@@ -65,11 +65,11 @@ yabai -m signal --add \
     title='^Microsoft Teams Notification$' \
     action='yabai -m window --focus next > /dev/null 2>&1'
 
-yabai -m signal --add \
-    event=window_focused \
-    app='^IntelliJ IDEA$' \
-    title='^.*$' \
-    action='yabai -m window --focus next > /dev/null 2>&1'
+# yabai -m signal --add \
+#     event=window_focused \
+#     app='^IntelliJ IDEA$' \
+#     title='^.*$' \
+#     action='yabai -m window --focus next > /dev/null 2>&1'
     
 
 # Don't manage WhatsApp call windows
@@ -100,7 +100,6 @@ yabai -m space --balance
 yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
 yabai -m signal --add event=window_destroyed action="sketchybar --trigger windows_on_spaces"
 yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"
-
 
 # yabai -m signal --add event=space_changed \
     # action="osascript -e 'tell application id \"tracesOf.Uebersicht\" to refresh widget id \"simple-bar-index-jsx\"'"
