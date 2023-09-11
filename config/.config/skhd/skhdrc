@@ -125,7 +125,7 @@ ctrl - 0x18            : yabai -m space --focus "$(yabai -m query --spaces --dis
 
 # float / unfloat window and center on screen
 alt - f                : yabai -m window --toggle float; \
-                         yabai -m window --grid 4:4:1:1:2:2
+                         yabai -m window --grid 12:12:1:1:10:10
 
 #######Rr################# Insert mode ###########################################
 
@@ -274,6 +274,8 @@ display < 1           : yabai -m display --focus 1; skhd -k 'escape'
 display < 2           : yabai -m display --focus 2; skhd -k 'escape'
 display < 3           : yabai -m display --focus 3; skhd -k 'escape'
 display < 4           : yabai -m display --focus 4; skhd -k 'escape'
+display < 5           : yabai -m display --focus 5; skhd -k 'escape'
+display < 6           : yabai -m display --focus 6; skhd -k 'escape'
 
 ##################### Window mode ##############################################
 
@@ -360,7 +362,7 @@ window < space        : yabai -m query --spaces --space | \
 
 reload < 0            : skhd -k 'escape'; \
                         yabai --restart-service; \
-                        launchctl kickstart -k "gui/${UID}/homebrew.mxcl.sketchybar"; \
+                        sleep 1 && brew services restart sketchybar; \
                         skhd --restart-service
 
 reload < 1            : yabai --restart-service; \
@@ -369,5 +371,5 @@ reload < 1            : yabai --restart-service; \
 reload < 2            : skhd -k 'escape'; \
                         skhd --restart-service
 
-reload < 3            : launchctl kickstart -k "gui/${UID}/homebrew.mxcl.sketchybar"; \
+reload < 3            : sleep 1 && brew services restart sketchybar; \
                         skhd -k 'escape'

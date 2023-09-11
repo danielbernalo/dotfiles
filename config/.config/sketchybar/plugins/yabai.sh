@@ -63,7 +63,8 @@ windows_on_spaces () {
 }
 
 mouse_clicked() {
-  yabai -m window --toggle float
+  yabai -m window --toggle float; \
+  yabai -m window --grid 12:12:1:1:10:10;
   window_state
 }
 

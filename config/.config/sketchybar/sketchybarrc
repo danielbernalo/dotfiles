@@ -77,6 +77,8 @@ source "$ITEM_DIR/github.sh"
  source "$ITEM_DIR/auris.sh"
 source "$ITEM_DIR/volume.sh"
 source "$ITEM_DIR/cpu.sh"
+source "$ITEM_DIR/mem.sh"
+ 
 # source "$ITEM_DIR/wifi.sh"
 
 
