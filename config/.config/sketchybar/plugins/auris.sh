@@ -4,7 +4,7 @@ source "$HOME/.config/sketchybar/colors.sh"
 Sourcesystem=$(SwitchAudioSource -c)
 
 if [ "$Sourcesystem" = "PRO X Wireless Gaming Headset" ]; then
-    sketchybar --set $NAME icon.color=$RED
+    sketchybar --set $NAME label="ON"
 else
-    sketchybar --set $NAME icon.color=$WHITE
+    sketchybar --set $NAME label="OFF"
 fi

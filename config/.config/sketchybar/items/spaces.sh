@@ -2,8 +2,7 @@
 SPACE_LABELS=( $(yabai -m query --spaces | jq -re '.[].label') )
 SPACE_NAME=( $(yabai -m query --spaces | jq -re '.[].index') )
 
-# Destroy space on right click, focus space on left click.
-# New space by left clicking separator (>)
+export SPACE_CLICK_SCRIPT="yabai -m space --focus \$SID 2>/dev/null"
 
 sid=0
 spaces=()
@@ -14,20 +13,23 @@ do
   space=(
     associated_space=$sid
     icon=${SPACE_LABELS[i]}
+    icon.color=0xffa7e3a1
     icon.padding_left=10
     icon.padding_right=15
+    icon.y_offset=-3                                                 \
+    label.y_offset=-3 
     padding_left=2
     padding_right=2
     label.padding_right=20
-    icon.highlight_color=$RED
+    icon.highlight_color=0xff86b2fa 
     label.font="sketchybar-app-font:Regular:13.0"
-    label.background.height=16
+    label.background.height=40
     label.background.drawing=on
-    label.background.color=$BACKGROUND_2
-    label.background.corner_radius=8
+    label.background.color=0x90494d64
+    label.background.corner_radius=4
     label.drawing=off
     script="$PLUGIN_DIR/space.sh"
-    click_script="$PLUGIN_DIR/space.click.sh"
+    click_script="$SPACE_CLICK_SCRIPT"
 
   )
 
@@ -38,7 +40,7 @@ done
 
 spaces=(
   background.color=$BACKGROUND_1
-  background.border_color=$BACKGROUND_2
+  background.border_color=0x90494d64
   background.border_width=1
   background.drawing=on
 )

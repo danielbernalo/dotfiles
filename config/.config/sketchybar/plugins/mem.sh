@@ -8,7 +8,5 @@ top -l1 | awk '/PhysMem/ {print $2}')
 
 precentage=$(echo $getPrecentage)
 MB=$(echo $getMB)
-echo $precentage
-sketchybar --set $NAME \
-                #  icon="" \
-                 label="$precentage%"
+
+sketchybar --set $NAME icon="" label="$precentage%"

@@ -11,9 +11,13 @@ spotify_anchor=(
   popup.height=150
   icon=􁁒
   icon.font="$FONT:Regular:25.0"
+  icon.padding_right=4                                       
+  icon.color=0xff47455c                                      
+  label.font="$FONT:Medium:$FONT_SIZE"                               
+  label.color=0xff47455c                                     
   label.drawing=off
   drawing=off
-  y_offset=2
+  y_offset=-3
 )
 
 spotify_cover=(

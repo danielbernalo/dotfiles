@@ -12,7 +12,7 @@ window_state() {
     LAST=$(yabai -m query --windows --window stack.last | jq '.["stack-index"]')
     
     ICON=$(printf "[%s/%s]" "$CURRENT" "$LAST")
-    args+=(--set $NAME icon=$YABAI_STACK icon.color=$RED label.drawing=on label="$ICON")
+    args+=(--set $NAME icon=$YABAI_STACK icon.color=$RED label.drawing=on label.color=$BLACK label="$ICON")
     yabai -m config active_window_border_color $RED > /dev/null 2>&1 &
 
   else 

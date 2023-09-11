@@ -7,6 +7,8 @@ yabai=(
   icon.font="$FONT:Bold:16.0"
   label.drawing=off
   icon.width=30
+  icon.y_offset=-3                                                 \
+  label.y_offset=-3 
   icon=$YABAI_GRID
   icon.color=$ORANGE
   associated_display=active
@@ -16,8 +18,10 @@ front_app=(
   script="$FRONT_APP_SCRIPT"
   icon.drawing=off
   padding_left=0
-  label.color=$WHITE
-  label.font="$FONT:Black:12.0"
+  icon.y_offset=-3                                                 \
+  label.y_offset=-3 
+  label.font="$FONT:Medium:$FONT_SIZE"                                \
+  label.color=0xff47455c                                      \
   associated_display=active
 )
 
