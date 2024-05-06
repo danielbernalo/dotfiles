@@ -1,8 +1,9 @@
 #!/bin/bash
+#sleep 8
 SPACE_LABELS=( $(yabai -m query --spaces | jq -re '.[].label') )
 SPACE_NAME=( $(yabai -m query --spaces | jq -re '.[].index') )
 
-export SPACE_CLICK_SCRIPT="yabai -m space --focus \$SID 2>/dev/null"
+export SPACE_CLICK_SCRIPT="yabai -m space --focus \$SID 2> /dev/null"
 
 sid=0
 spaces=()
@@ -29,7 +30,7 @@ do
     label.background.corner_radius=4
     label.drawing=off
     script="$PLUGIN_DIR/space.sh"
-    click_script="$SPACE_CLICK_SCRIPT"
+    click_script="$PLUGIN_DIR/space.click.sh"
 
   )
 
@@ -61,3 +62,13 @@ sketchybar --add bracket spaces '/space\..*/' \
                                               # \
           #  --add item separator left          \
           #  --set separator "${separator[@]}"
+
+YABAI_SPACES="$(yabai -m query --spaces)"
+
+#args=()
+#while read -r index label
+#do
+#  args+=(--set space.${index} icon="${label}")
+#done <<< "$(yabai -m query --spaces | jq -r '.[] | [.index, .label] | @sh')"
+
+#sketchybar "${args[@]}"
