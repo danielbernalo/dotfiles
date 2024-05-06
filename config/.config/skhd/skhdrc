@@ -371,5 +371,5 @@ reload < 1            : yabai --restart-service; \
 reload < 2            : skhd -k 'escape'; \
                         skhd --restart-service
 
-reload < 3            : sleep 1 && brew services restart sketchybar; \
+reload < 3            : sketchybar --reload; \
                         skhd -k 'escape'

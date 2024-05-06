@@ -59,9 +59,10 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH="$PATH:/usr/local/lib/python3.7/site-packages"
-export PATH="$(/usr/libexec/java_home -v11)/bin:$PATH"
+
 export PATH="$HOME/.rbenv/bin:$PATH"
 export JAVA_HOME=$(/usr/libexec/java_home -v11)
+export PATH="$JAVA_HOME/bin:$PATH"
 export CPPFLAGS="-I/usr/local/opt/openjdk@11/include"
 export LANGUAGE="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
@@ -78,3 +79,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 export PATH="/usr/local/opt/libpq/bin:$PATH"
 # vim: ft=zsh
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+export DOKKU_HOST=nuevoeste.com
