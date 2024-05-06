@@ -14,7 +14,7 @@ do
   space=(
     associated_space=$sid
     icon=${SPACE_LABELS[i]}
-    icon.color=0xffa7e3a1
+    icon.color=0xff939ab7
     icon.padding_left=10
     icon.padding_right=15
     icon.y_offset=-3                                                 \
@@ -22,7 +22,7 @@ do
     padding_left=2
     padding_right=2
     label.padding_right=20
-    icon.highlight_color=0xff86b2fa 
+    icon.highlight_color=0xffff9ab7 
     label.font="sketchybar-app-font:Regular:13.0"
     label.background.height=40
     label.background.drawing=on

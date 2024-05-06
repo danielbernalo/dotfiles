@@ -19,18 +19,18 @@ FONT_SIZE="12.0"
 PADDINGS=3  # All elements use this padidng
 ###
 ### Setting up the general bar appearance and default values ###
-sketchybar --bar     height=42                                                     \
-                     corner_radius=14                                              \
+sketchybar --bar     height=36                                                     \
+                     corner_radius=5                                              \
                      border_width=0                                                \
                      margin=380                                                     \
                      blur_radius=0                                                 \
                      position=top                                                  \
                      padding_left=4                                                \
                      padding_right=4                                               \
-                     color=0xfff4f5f8                                              \
+                     color=$BAR_COLOR                                              \
                      topmost=off                                                   \
                      sticky=on                                                     \
-                     font_smoothing=off                                            \
+                     font_smoothing=on                                            \
                      y_offset=-100                                                    \
                      notch_width=0                                                 \
                                                                                    \
@@ -57,14 +57,12 @@ sketchybar --animate sin 30 --bar y_offset=-100 y_offset=-10
 
 ### Center ###
 . "$ITEM_DIR/front_app.sh"
-. "$ITEM_DIR/spotify.sh"
 
 ### Right ###
 . "$ITEM_DIR/calendar.sh"    # Time inclued Europe
 . "$ITEM_DIR/auris.sh"    # Auris switch
 # . "$ITEM_DIR/updates.sh"   # updates monitor
 # . "$ITEM_DIR/battery.sh"   # battery
-. "$ITEM_DIR/system.sh"    # resources monitor
 
 sketchybar --update
 echo "sketchybar configuation loaded.."

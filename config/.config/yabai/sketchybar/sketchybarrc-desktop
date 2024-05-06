@@ -7,7 +7,7 @@ PLUGIN_SHARED_DIR="$HOME/.config/sketchybar/plugins"
 SPOTIFY_EVENT="com.spotify.client.PlaybackStateChanged"
 
 sketchybar --bar \
-    height=32 \
+    height=20 \
     color=0x66494d64 \
     margin=0 \
     sticky=on \
@@ -19,7 +19,7 @@ sketchybar --bar \
 sketchybar --default \
     background.height=32 \
     icon.color=0xff24273a \
-    icon.font="$FONT_FACE:Medium:20.0" \
+    icon.font="$FONT_FACE:Medium:16.0" \
     icon.padding_left=5 \
     icon.padding_right=5 \
     label.color=0xff24273a \
@@ -67,12 +67,6 @@ sketchybar --add bracket front_app_bracket \
     front_app.name \
     --subscribe front_app front_app_switched
 
-sketchybar --add item clock right \
-    --set clock \
-    icon=󰃰 \
-    background.color=0xffed8796 \
-    update_freq=10 \
-    script="$PLUGIN_SHARED_DIR/clock.sh"
 
 sketchybar --add event spotify_change $SPOTIFY_EVENT \
     --add item spotify right \
